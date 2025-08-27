@@ -5,7 +5,7 @@ namespace TaskManagement.Services.Interfaces
         Task<IEnumerable<TDTO>> GetAllAsync();
         Task<TDTO> GetByIdAsync(int id);
         Task<TDTO> AddAsync(TDTO dto);
-        Task updateAsync(int id, TDTO dto);
+        Task<TDTO> UpdateAsync(int id, TDTO dto);
         Task DeleteAsync(int id);
     }
 }

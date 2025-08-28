@@ -43,6 +43,72 @@ namespace TaskManagement.Controllers
             }
             return View(viewModel);
         }
-    }
 
+        public async Task<IActionResult> Edit(int id)
+        {
+            var categoryDTO = await _categoryService.GetByIdAsync(id);
+            if (categoryDTO == null)
+            {
+                return NotFound();
+            }
+            var viewModel = _mapper.Map<CategoryVM>(categoryDTO);
+            return View(viewModel);
+        }
+
+        public async Task<IActionResult> Show(int id)
+        {
+            var category = await _categoryService.GetByIdAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            var viewModel = _mapper.Map<CategoryVM>(category);
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, CategoryVM viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var exists = await _categoryService.GetByIdAsync(id);
+                if (exists == null)
+                {
+                    return NotFound();
+                }
+                try
+                {
+                    var categoryDTO = _mapper.Map<CategoryDTO>(viewModel);
+                    await _categoryService.UpdateAsync(id, categoryDTO);
+                }
+                catch (System.Exception)
+                {
+                    return NotFound();
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(viewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var category = await _categoryService.GetByIdAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            try
+            {
+                await _categoryService.DeleteAsync(id);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            return RedirectToAction(nameof(Index));
+
+        }
+    }
 }

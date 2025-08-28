@@ -8,7 +8,7 @@ namespace TaskManagement.Models.ViewModels
 
         [Required]
         [Display(Name = "Category Name")]
-        [StringLength(50, ErrorMessage = "Category name cannot exceed 50 characters.")]
+        [StringLength(10, ErrorMessage = "Category name cannot exceed 10 characters.")]
         public string CategoryName { get; set; }
     }
 }

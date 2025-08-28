@@ -1,4 +1,6 @@
+using System.Linq.Expressions;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskManagement.Repositories.Interfaces;
 using TaskManagement.Services.Interfaces;
 
@@ -36,7 +38,7 @@ namespace TaskManagement.Services
             return _mapper.Map<TDTO>(entity);
         }
 
-        public async Task<TDTO> AddAsync(TDTO dto)
+        public virtual async Task<TDTO> AddAsync(TDTO dto)
         {
             var entity = _mapper.Map<T>(dto);
             await _repository.AddAsync(entity);
@@ -44,7 +46,7 @@ namespace TaskManagement.Services
             return _mapper.Map<TDTO>(createdEntity);
         }
 
-        public async Task<TDTO> UpdateAsync(int id, TDTO dto)
+        public virtual async Task<TDTO> UpdateAsync(int id, TDTO dto)
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity == null)
@@ -64,6 +66,10 @@ namespace TaskManagement.Services
                 throw new KeyNotFoundException();
             }
             await _repository.DeleteAsync(id);
+        }
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _repository.AnyAsync(predicate); 
         }
     }
 }

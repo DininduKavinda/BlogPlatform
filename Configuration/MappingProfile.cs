@@ -14,6 +14,12 @@ namespace TaskManagement.Configuration
 
             CreateMap<CategoryVM, CategoryDTO>();
             CreateMap<CategoryDTO, CategoryVM>();
+
+            CreateMap<RoleDTO, Role>();
+            CreateMap<Role, RoleDTO>();
+
+            CreateMap<RoleVM, RoleDTO>();
+            CreateMap<RoleDTO, RoleVM>();
         }
     }
 }

@@ -35,11 +35,24 @@ namespace TaskManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CategoryVM viewModel)
         {
+
             if (ModelState.IsValid)
             {
-                var categoryDTO = _mapper.Map<CategoryDTO>(viewModel);
-                await _categoryService.AddAsync(categoryDTO);
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    var categoryDTO = _mapper.Map<CategoryDTO>(viewModel);
+                    await _categoryService.AddAsync(categoryDTO);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (InvalidCastException ex)
+                {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError(string.Empty, "An error occurred while creating the category.");    
+                }
+                
             }
             return View(viewModel);
         }
@@ -81,12 +94,12 @@ namespace TaskManagement.Controllers
                 {
                     var categoryDTO = _mapper.Map<CategoryDTO>(viewModel);
                     await _categoryService.UpdateAsync(id, categoryDTO);
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (System.Exception)
+                catch (InvalidCastException ex)
                 {
-                    return NotFound();
+                    ModelState.AddModelError(string.Empty, ex.Message);
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(viewModel);
         }

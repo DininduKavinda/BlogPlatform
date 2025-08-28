@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using TaskManagement.Data;
 using TaskManagement.Repositories.Interfaces;
@@ -49,7 +50,12 @@ namespace TaskManagement.Repositories
 
         public async Task<bool> ExistAsync(int id)
         {
-            return await _dbSet.AnyAsync(e => EF.Property<int>(e,"Id") == id);
+            return await _dbSet.AnyAsync(e => EF.Property<int>(e, "Id") == id);
+        }
+
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.AnyAsync(predicate);
         }
     }
 } 

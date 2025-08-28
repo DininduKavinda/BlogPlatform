@@ -1,0 +1,27 @@
+@model TaskManagement.Models.ViewModels.RoleVM
+
+@{
+    ViewData["Title"] = "Role Details";
+}
+
+<h1>Role Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RoleName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RoleName)
+        </dd>  
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+        <i class="bi bi-pencil"></i> Edit
+    </a>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to List
+    </a>
+</div>

@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+
 namespace TaskManagement.Repositories.Interfaces
 {
     public interface IRepository<T> where T : class
@@ -8,5 +10,6 @@ namespace TaskManagement.Repositories.Interfaces
         Task UpdateAsync(T entity);
         Task DeleteAsync(int id);
         Task<bool> ExistAsync(int id);
+        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
     }
 }

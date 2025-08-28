@@ -17,6 +17,8 @@ namespace TaskManagement.Models
         [Column(TypeName = "text")]
         public string Content { get; set; }
 
+        public string Image { get; set; }
+
         [Required]
         public int AuthorId { get; set; }
 

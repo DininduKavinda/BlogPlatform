@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+
 namespace TaskManagement.Services.Interfaces
 {
     public interface IService<T, TDTO> where T : class where TDTO : class
@@ -7,5 +9,6 @@ namespace TaskManagement.Services.Interfaces
         Task<TDTO> AddAsync(TDTO dto);
         Task<TDTO> UpdateAsync(int id, TDTO dto);
         Task DeleteAsync(int id);
+        Task<bool> AnyAsync(Expression<Func<T,bool>> predicate);
     }
 }

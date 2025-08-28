@@ -16,5 +16,30 @@ namespace TaskManagement.Services
             _categoryRepository = categoryRepository;
             _categoryMapper = categoryMapper;
         }
+
+        public async Task<bool> CategoryNameAnyAsync(string categoryName)
+        {
+            return await _categoryRepository.AnyAsync(c => c.CategoryName == categoryName);
+        }
+
+        public override async Task<CategoryDTO> AddAsync(CategoryDTO dto)
+        {
+            var exists = await CategoryNameAnyAsync(dto.CategoryName);
+            if (exists)
+            {
+                throw new InvalidCastException("Category with the same name already exists.");
+            }
+            return await base.AddAsync(dto);
+        }
+
+        public override async Task<CategoryDTO> UpdateAsync(int id, CategoryDTO dto)
+        {
+            var exists = await CategoryNameAnyAsync(dto.CategoryName);
+            if (exists)
+            {
+                throw new InvalidCastException("Category with the same name already exists.");
+            }
+            return await base.UpdateAsync(id, dto);
+        }
     }
 }

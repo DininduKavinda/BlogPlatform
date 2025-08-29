@@ -32,7 +32,7 @@ namespace TaskManagement.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity == null)
-            {
+            {           
                 throw new KeyNotFoundException();
             }
             return _mapper.Map<TDTO>(entity);

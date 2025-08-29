@@ -135,3 +135,10 @@ C:\Users\Staff\Downloads\Badge\dotNet\TaskManagement\obj\Debug\net8.0\refint\Tas
 C:\Users\Staff\Downloads\Badge\dotNet\TaskManagement\obj\Debug\net8.0\TaskManagement.pdb
 C:\Users\Staff\Downloads\Badge\dotNet\TaskManagement\obj\Debug\net8.0\TaskManagement.genruntimeconfig.cache
 C:\Users\Staff\Downloads\Badge\dotNet\TaskManagement\obj\Debug\net8.0\ref\TaskManagement.dll
+C:\Users\Staff\Downloads\Badge\dotNet\TaskManagement\bin\Debug\net8.0\Konscious.Security.Cryptography.Argon2.dll
+C:\Users\Staff\Downloads\Badge\dotNet\TaskManagement\bin\Debug\net8.0\Konscious.Security.Cryptography.Blake2.dll
+C:\Users\Staff\Downloads\Badge\dotNet\TaskManagement\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\Staff\Downloads\Badge\dotNet\TaskManagement\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Staff\Downloads\Badge\dotNet\TaskManagement\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Staff\Downloads\Badge\dotNet\TaskManagement\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Staff\Downloads\Badge\dotNet\TaskManagement\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll

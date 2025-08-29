@@ -26,6 +26,13 @@ namespace TaskManagement.Controllers.Auth
             return View(viewModel);
         }
 
+        public async Task<IActionResult> Show(int id)
+        {
+            var role = await _roleService.GetByIdAsync(id);
+            var viewModel = _mapper.Map<RoleVM>(role);
+            return View(viewModel);
+        }
+
         public IActionResult Create()
         {
             return View();

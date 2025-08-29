@@ -11,5 +11,6 @@ namespace TaskManagement.Repositories.Interfaces
         Task DeleteAsync(int id);
         Task<bool> ExistAsync(int id);
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
     }
 }

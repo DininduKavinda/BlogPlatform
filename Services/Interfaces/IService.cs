@@ -9,6 +9,6 @@ namespace TaskManagement.Services.Interfaces
         Task<TDTO> AddAsync(TDTO dto);
         Task<TDTO> UpdateAsync(int id, TDTO dto);
         Task DeleteAsync(int id);
-        Task<bool> AnyAsync(Expression<Func<T,bool>> predicate);
+        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
     }
 }

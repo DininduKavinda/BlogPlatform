@@ -29,7 +29,17 @@ namespace TaskManagement.Models
         [ForeignKey("RoleId")]
         public virtual Role Role { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime LastLoginAt { get; set; }
+
+        public bool IsActive { get; set; } = true;
+
+        public bool EmailConfirmed { get; set; }
+
+        public string? PasswordResetToken { get; set; }
+
+        public DateTime? ResetTokenExpires { get; set; }
 
         public ICollection<Post> Posts { get; set; } = new List<Post>();
 

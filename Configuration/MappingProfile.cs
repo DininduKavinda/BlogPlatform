@@ -31,6 +31,10 @@ namespace TaskManagement.Configuration
             CreateMap<RegisterDTO, User>();
             CreateMap<User, RegisterDTO>();
 
+            
+            CreateMap<LoginVM, User>();
+            CreateMap<User, LoginVM>();
+
             CreateMap<ChangePasswordVM, ChangePasswordDTO>();
             CreateMap<ChangePasswordDTO, ChangePasswordVM>();
         }

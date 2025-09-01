@@ -47,6 +47,7 @@ namespace TaskManagement.Services
 
             var user = _mapper.Map<User>(registerDTO);
             user.PasswordHash = _passwordHasher.HashPassword(registerDTO.Password);
+            user.RoleId = 2;
             user.CreatedAt = DateTime.UtcNow;
             await _authRepository.AddAsync(user);
 

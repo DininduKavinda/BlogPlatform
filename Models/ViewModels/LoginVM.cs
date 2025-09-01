@@ -1,13 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TaskManagementApp.Models.ViewModels
+namespace TaskManagement.Models.ViewModels
 {
     public class LoginVM
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Username")]
-        public string Username { get; set; }
+        [Display(Name = "Email")]
+        public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

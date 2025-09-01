@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TaskManagementApp.Models.ViewModels
+namespace TaskManagement.Models.ViewModels
 {
     public class ChangePasswordVM
     {

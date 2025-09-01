@@ -1,13 +1,14 @@
 using TaskManagement.DTOs.Auth;
-using TaskManagement.Services.Helpers;
+using TaskManagement.Models;
 
 namespace TaskManagement.Services.Interfaces
 {
-    public interface IAuthService 
+    public interface IAuthService
     {
-        Task<AuthenticationResult> RegisterAsync(RegisterDTO registerDTO);
-        Task<AuthenticationResult> LoginAsync(LoginDTO loginDTO);
-        Task<bool> LogoutAsync();
-        Task<bool> ChangePasswordAsync(int UserId, ChangePasswordDTO changePasswordDTO);
+        Task<bool> RegisterAsync(RegisterDTO registerDTO);
+        Task<User> LoginAsync(LoginDTO loginDTO);
+        Task<string> GeneratePasswordResetTokenAsync(string email);
+        Task<bool> ResetPasswordAsync(string email, string token, string newPassword);
+        Task<bool> ValidateResetTokenAsync(string email, string token);
     }
 }

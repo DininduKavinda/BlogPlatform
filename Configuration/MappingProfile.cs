@@ -1,5 +1,6 @@
 using AutoMapper;
 using TaskManagement.DTOs;
+using TaskManagement.DTOs.Auth;
 using TaskManagement.Models;
 using TaskManagement.Models.ViewModels;
 
@@ -20,6 +21,18 @@ namespace TaskManagement.Configuration
 
             CreateMap<RoleVM, RoleDTO>();
             CreateMap<RoleDTO, RoleVM>();
+
+            CreateMap<LoginVM, LoginDTO>();
+            CreateMap<LoginDTO, LoginVM>();
+
+            CreateMap<RegisterVM, RegisterDTO>();
+            CreateMap<RegisterDTO, RegisterVM>();
+
+            CreateMap<RegisterDTO, User>();
+            CreateMap<User, RegisterDTO>();
+
+            CreateMap<ChangePasswordVM, ChangePasswordDTO>();
+            CreateMap<ChangePasswordDTO, ChangePasswordVM>();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace TaskManagement.Models.ViewModels
     {
         [Required]
         [Display(Name = "Username")]
-        public string LastName { get; set; }
+        public string Username { get; set; }
 
         [Required]
         [EmailAddress]

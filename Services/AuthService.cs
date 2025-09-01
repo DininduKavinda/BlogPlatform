@@ -2,10 +2,11 @@ using AutoMapper;
 using TaskManagement.Configuration.Auth;
 using TaskManagement.DTOs;
 using TaskManagement.DTOs.Auth;
+using TaskManagement.Models;
 using TaskManagement.Repositories;
 using TaskManagement.Repositories.Interfaces;
-using TaskManagement.Services.Helpers;
 using TaskManagement.Services.Interfaces;
+using TaskManagement.Utilities.EmailServices;
 
 namespace TaskManagement.Services
 {
@@ -14,56 +15,109 @@ namespace TaskManagement.Services
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IAuthRepository _authRepository;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
 
         public AuthService(
             IUserRepository userRepository,
             IRoleRepository roleRepository,
             IPasswordHasher passwordHasher,
+            IAuthRepository authRepository,
+            IEmailService emailService,
             IMapper mapper
             )
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _passwordHasher = passwordHasher;
+            _authRepository = authRepository;
+            _emailService = emailService;
             _mapper = mapper;
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(RegisterDTO registerDTO)
+        public async Task<bool> RegisterAsync(RegisterDTO registerDTO)
         {
+            var exists = await _authRepository.GetByEmailAsync(registerDTO.Email);
 
-            var exists = await _userRepository.AnyAsync(u => u.Username == registerDTO.Username || u.Email == registerDTO.Email);
-
-            if (exists)
+            if (exists != null)
             {
-                return new AuthenticationResult
-                {
-                    Success = false,
-                    Message = "Username or Email already exists"
-                };
+                return false;
             }
 
-            var defaultRole = await _roleRepository.FindAsync(r => r.RoleName == "User");
+            var user = _mapper.Map<User>(registerDTO);
+            user.PasswordHash = _passwordHasher.HashPassword(registerDTO.Password);
+            user.CreatedAt = DateTime.UtcNow;
+            await _authRepository.AddAsync(user);
 
-            var user = new User
+            _ = SendWelcomeEmail(user);
+            return true;
+        }
+
+        public async Task<User> LoginAsync(LoginDTO loginDTO)
+        {
+            var user = await _authRepository.GetByEmailAsync(loginDTO.Email);
+
+            var isValidPassword = _passwordHasher.VerifyPassword(loginDTO.Password, user.PasswordHash);
+
+            if (user == null || !isValidPassword)
             {
-                Username = registerDTO.Username,
-                Email = registerDTO.Email,
-                PasswordHash = _passwordHasher.HashPassword(registerDTO.Password),
-                RoleId = defaultRole.First().Id,
-                CreatedAt = DateTime.UtcNow,
-                IsActive = true
-            };
+                throw new UnauthorizedAccessException("Invalid email or password.");
+            }
 
-            await _userRepository.AddAsync(user);
+            await _authRepository.UpdateLastLoginAsync(user.Id);
+            return user;
 
-            return new AuthenticationResult
+        }
+
+        public async Task<string> GeneratePasswordResetTokenAsync(string email)
+        {
+            var user = await _authRepository.GetByEmailAsync(email);
+            if (user == null)
             {
-                Success = true,
-                Message = "Registration Complete",
-                User = _mapper.Map<UserDTO>(user)
-            };
+                return null;
+            }
+            var token = Guid.NewGuid().ToString();
+            user.PasswordResetToken = token;
+            user.ResetTokenExpires = DateTime.UtcNow.AddMinutes(5);
 
+            await _authRepository.UpdateAsync(user);
+            return token;
+        }
+
+        public async Task<bool> ResetPasswordAsync(string email, string token, string newPassword)
+        {
+            var user = await _authRepository.GetByEmailAsync(email);
+
+            if (user == null || user.PasswordResetToken != token || user.ResetTokenExpires < DateTime.UtcNow)
+            {
+                return false;
+            }
+
+            user.ResetTokenExpires = null;
+            user.PasswordResetToken = null;
+            user.PasswordHash = _passwordHasher.HashPassword(newPassword);
+            await _authRepository.UpdateAsync(user);
+            return true;
+        }
+
+        public async Task<bool> ValidateResetTokenAsync(string email, string token)
+        {
+            var user = await _authRepository.GetByEmailAsync(email);
+            return user != null && user.PasswordResetToken == token && user.ResetTokenExpires > DateTime.UtcNow;
+        }
+
+        private async Task SendWelcomeEmail(User user)
+        {
+            try
+            {
+                await _emailService.SendWelcomeEmailAsync(user.Email);
+            }
+            catch (Exception ex)
+            {
+                // Log email sending failure but don't fail registration
+                Console.WriteLine($"Failed to send welcome email: {ex.Message}");
+            }
         }
 
     }
